@@ -24,6 +24,7 @@ class _MyAppState extends State<MyApp> {
   final List<_ConnectedItem> _connectedList = [];
   bool _isScaning = false;
 
+  //List of scanned data
   @override
   void initState() {
     super.initState();
@@ -79,13 +80,20 @@ class _MyAppState extends State<MyApp> {
                   content: Text('$val', style: TextStyle(color: Colors.white),),
                   backgroundColor: Colors.green,
                 );
-
                 // Find the ScaffoldMessenger in the widget tree
                 // and use it to show a SnackBar.
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
 
             ),
+
+            MaterialButton(
+
+              onPressed: () {
+
+            },
+              child: Text("Submit"),
+            )
           ],
         ),
       ),
