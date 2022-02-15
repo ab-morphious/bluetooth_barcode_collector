@@ -25,6 +25,9 @@ class _MyAppState extends State<MyApp> {
   bool _isScaning = false;
 
   //List of scanned data
+  List<_ScannedData> _scanData = [];
+  String _scannedItem = "";
+  int _quantity = -1;
   @override
   void initState() {
     super.initState();
@@ -67,39 +70,39 @@ class _MyAppState extends State<MyApp> {
           children: [
             TextField(
               decoration: InputDecoration(
-                hintText: "Tap here to focus",
+                  hintText: "Tap here to focus",
                   filled: true,
                   fillColor: Colors.blue.shade100,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
-                  )
-              ),
-              onChanged: (val){
-                final snackBar = SnackBar(
-                  content: Text('$val', style: TextStyle(color: Colors.white),),
-                  backgroundColor: Colors.green,
-                );
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  )),
+              onChanged: (val) {
+                setState(() {
+                  this._scannedItem = val;
+                });
               },
-
             ),
-
             MaterialButton(
-
               onPressed: () {
-
-            },
-              child: Text("Submit"),
+                setState(() {
+                  _scanData
+                      .add(new _ScannedData(this._scannedItem, this._quantity));
+                });
+              },
+              child: Text("Submit".toUpperCase()),
             )
           ],
         ),
       ),
 
-      body:
-       Container(),
+      body: ListView.builder(
+          itemCount: _scanData.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+                leading: Text(_scanData[index]._getValue()),
+                trailing: Text(_scanData[index]._getQuantitiy().toString()));
+          }),
       floatingActionButton: FloatingActionButton(
         backgroundColor: _isScaning ? Colors.red : Colors.blue,
         onPressed: () {
@@ -139,4 +142,19 @@ class _ConnectedItem {
   final String? _name;
 
   _ConnectedItem(this._device, this._macAddress, this._name);
+}
+
+class _ScannedData {
+  final String value;
+  final int? _quantity;
+
+  _ScannedData(this.value, this._quantity);
+
+  String _getValue(){
+    return this.value;
+  }
+
+  int? _getQuantitiy(){
+    return this._quantity;
+  }
 }
