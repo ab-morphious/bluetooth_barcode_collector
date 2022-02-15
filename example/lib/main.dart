@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_elves/flutter_blue_elves.dart';
 import 'device_control.dart';
@@ -100,39 +101,16 @@ class _MyAppState extends State<MyApp> {
           itemCount: _scanData.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
-                leading: Text(_scanData[index]._getValue()),
+                tileColor:
+                    index % 2 == 0 ? Colors.white70 : Colors.blue.shade50,
+                leading: Text(
+                  _scanData[index]._getValue(),
+                  style:
+                      (TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold)),
+                ),
                 trailing: Text(_scanData[index]._getQuantitiy().toString()));
           }),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: _isScaning ? Colors.red : Colors.blue,
-        onPressed: () {
-          getHideConnectedDevice();
-          if ((Platform.isAndroid && _blueLack.isEmpty) ||
-              (Platform.isIOS &&
-                  _iosBlueState == IosBluetoothState.poweredOn)) {
-            if (_isScaning) {
-              FlutterBlueElves.instance.stopScan();
-            } else {
-              _scanResultList = [];
-              setState(() {
-                _isScaning = true;
-              });
-              FlutterBlueElves.instance.startScan(5000).listen((event) {
-                setState(() {
-                  _scanResultList.insert(0, event);
-                });
-              }).onDone(() {
-                setState(() {
-                  _isScaning = false;
-                });
-              });
-            }
-          }
-        },
-        tooltip: 'scan',
-        child: Icon(_isScaning ? Icons.stop : Icons.find_replace),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        );
   }
 }
 
@@ -150,11 +128,11 @@ class _ScannedData {
 
   _ScannedData(this.value, this._quantity);
 
-  String _getValue(){
+  String _getValue() {
     return this.value;
   }
 
-  int? _getQuantitiy(){
+  int? _getQuantitiy() {
     return this._quantity;
   }
 }
