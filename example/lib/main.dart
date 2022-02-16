@@ -216,12 +216,25 @@ class _MyAppState extends State<MyApp> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('TextField in Dialog'),
+            title: Text('Enter quantity'),
+            actions: [
+              FlatButton(
+                  child: Text('CANCEL'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              FlatButton.icon(
+                  label: Text('DONE', style: TextStyle(color: Colors.white),),
+                  color: Colors.indigo,
+                  onPressed: () {
+
+                  }, icon: Icon(Icons.done, color: Colors.white,),)
+            ],
             content: TextField(
               onChanged: (value) {
 
               },
-              decoration: InputDecoration(hintText: "Text Field in Dialog"),
+              decoration: InputDecoration(hintText: "Enter quantity here"),
             ),
 
           );
