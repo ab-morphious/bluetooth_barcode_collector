@@ -87,12 +87,12 @@ class _MyAppState extends State<MyApp> {
                 setState(() {
                   _scannedItem = val;
                 });
-                if(quantityInputShown==false) {
-                  Future.delayed(const Duration(milliseconds: 2000), () {
-                    // Here you can write your code
+                Future.delayed(const Duration(milliseconds: 2000), () {
+                  // Here you can write your code
+                  if (quantityInputShown == false) {
                     _displayTextInputDialog(context);
-                  });
-                }
+                  }
+                });
               },
             ),
           ],
@@ -139,7 +139,7 @@ class _MyAppState extends State<MyApp> {
                 FlatButton.icon(
                   onPressed: () {
                     setState(() {
-                     _displayTextInputDialog(context);
+                      _displayTextInputDialog(context);
                     });
                   },
                   icon: Icon(
@@ -226,29 +226,36 @@ class _MyAppState extends State<MyApp> {
                   child: Text('CANCEL'),
                   onPressed: () {
                     setState(() {
-                      quantityInputShown = true;
+                      quantityInputShown = false;
                     });
                     Navigator.of(context).pop();
                   }),
               FlatButton.icon(
-                  label: Text('DONE', style: TextStyle(color: Colors.white),),
-                  color: Colors.indigo,
-                  onPressed: () {
-                    _addRow(this._scannedItem, 1, itemIndex);
-                    itemIndex = _rowList.length;
-                    setState(() {
-                      quantityInputShown = false;
-                    });
-                    Navigator.of(context).pop();
-                  }, icon: Icon(Icons.done, color: Colors.white,),)
+                label: Text(
+                  'DONE',
+                  style: TextStyle(color: Colors.white),
+                ),
+                color: Colors.indigo,
+                onPressed: () {
+                  _addRow(this._scannedItem, 1, itemIndex);
+                  itemIndex = _rowList.length;
+                  setState(() {
+                    quantityInputShown = false;
+                  });
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(
+                  Icons.done,
+                  color: Colors.white,
+                ),
+              )
             ],
             content: TextField(
               onChanged: (value) {
-                  this._quantity = int.parse(value);
+                this._quantity = int.parse(value);
               },
               decoration: InputDecoration(hintText: "Enter quantity here"),
             ),
-
           );
         });
   }
