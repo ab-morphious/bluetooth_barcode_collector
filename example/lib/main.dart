@@ -83,6 +83,7 @@ class _MyAppState extends State<MyApp> {
                     borderSide: BorderSide.none,
                   )),
               onChanged: (val) {
+
                 Future.delayed(const Duration(milliseconds: 2000), () {
                   // Here you can write your code
                   _displayTextInputDialog(context);
@@ -96,7 +97,7 @@ class _MyAppState extends State<MyApp> {
         children: [
           Container(
             padding: EdgeInsets.all(5.0),
-            color: Colors.indigo.shade500,
+            color: Colors.blueGrey,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -131,7 +132,6 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ),
                 FlatButton.icon(
-                  color: Colors.green,
                   onPressed: () {
                     setState(() {
                       _addRow(this._scannedItem, 1, itemIndex);
@@ -139,11 +139,11 @@ class _MyAppState extends State<MyApp> {
                     });
                   },
                   icon: Icon(
-                    Icons.send,
+                    Icons.add_circle,
                     color: Colors.white,
                   ),
                   label: Text(
-                    "Submit".toUpperCase(),
+                    "Quantity".toUpperCase(),
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -183,15 +183,12 @@ class _MyAppState extends State<MyApp> {
               )),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: _isScaning ? Colors.red : Colors.blue,
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.blueGrey,
         onPressed: () {},
         tooltip: 'Send',
-        child: CircleAvatar(
-          child: Icon(Icons.send),
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.white,
-        ),
+        label: Text('Upload'),
+        icon: Icon(Icons.cloud_upload),
       ),
     );
   }
