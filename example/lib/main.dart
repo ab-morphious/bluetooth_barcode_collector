@@ -33,38 +33,11 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(const Duration(milliseconds: 5000),
-        Platform.isAndroid ? androidGetBlueLack : iosGetBlueState);
-    getHideConnectedDevice();
-  }
-
-  void iosGetBlueState(timer) {
-    FlutterBlueElves.instance.iosCheckBluetoothState().then((value) {
-      setState(() {
-        _iosBlueState = value;
-      });
-    });
-  }
-
-  void androidGetBlueLack(timer) {
-    FlutterBlueElves.instance.androidCheckBlueLackWhat().then((values) {
-      setState(() {
-        _blueLack = values;
-      });
-    });
-  }
-
-  void getHideConnectedDevice() {
-    FlutterBlueElves.instance.getHideConnectedDevices().then((values) {
-      setState(() {
-        _hideConnectedList = values;
-      });
-    });
   }
 
   List<DataRow> _rowList = [];
-
-  void _addRow(String product, int quantity, int index) {
+  static var itemIndex = 0;
+  void _addRow(String product, int quantity, int id) {
     // Built in Flutter Method.
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -72,7 +45,20 @@ class _MyAppState extends State<MyApp> {
       _rowList.add(DataRow(cells: <DataCell>[
         DataCell(Text(product)),
         DataCell(Text(quantity.toString())),
-        DataCell(Text(quantity.toString())),
+        DataCell(IconButton(
+          onPressed: () {
+            setState(() {
+              _rowList.removeAt(id);
+              print(id);
+              id = id-1;
+            });
+          },
+          icon: Icon(
+            Icons.delete,
+            size: 22,
+            color: Colors.red.shade300,
+          ),
+        )),
         // DataCell(MaterialButton(onPressed: () {}, child: Text("Delete"))),
       ]));
     });
@@ -110,7 +96,8 @@ class _MyAppState extends State<MyApp> {
           MaterialButton(
             onPressed: () {
               setState(() {
-                _addRow(this._scannedItem, 1, 1);
+                _addRow(this._scannedItem, 1, itemIndex);
+                itemIndex = _rowList.length;
               });
             },
             child: Text("Submit".toUpperCase()),
@@ -142,67 +129,18 @@ class _MyAppState extends State<MyApp> {
                       ),
                     )
                   ],
-                  rows: _rowList)
-              //   Container(
-              //   padding: EdgeInsets.symmetric(horizontal: 10.0),
-              //   color: index % 2 == 0
-              //       ? Colors.white70
-              //       : Colors.blueGrey.shade50,
-              //   child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //       children: [
-              //         Text(
-              //           _scanData[index]._getValue(),
-              //           style: (TextStyle(
-              //               fontSize: 15.0, fontWeight: FontWeight.bold)),
-              //         ),
-              //         Text(
-              //           _scanData[index]._getQuantitiy().toString(),
-              //           style: (TextStyle(
-              //               fontSize: 15.0)),
-              //         ),
-              //         MaterialButton(
-              //           onPressed: () {},
-              //           textColor: Colors.red,
-              //           child: Text(
-              //             "DELETE",
-              //             style: (TextStyle(fontSize: 12.0)),
-              //           ),
-              //         ),
-              //       ]),
-              // );
-              ),
+                  rows: _rowList)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: _isScaning ? Colors.red : Colors.blue,
-        onPressed: () {
-          getHideConnectedDevice();
-          if ((Platform.isAndroid && _blueLack.isEmpty) ||
-              (Platform.isIOS &&
-                  _iosBlueState == IosBluetoothState.poweredOn)) {
-            if (_isScaning) {
-              FlutterBlueElves.instance.stopScan();
-            } else {
-              _scanResultList = [];
-              setState(() {
-                _isScaning = true;
-              });
-              FlutterBlueElves.instance.startScan(5000).listen((event) {
-                setState(() {
-                  _scanResultList.insert(0, event);
-                });
-              }).onDone(() {
-                setState(() {
-                  _isScaning = false;
-                });
-              });
-            }
-          }
-        },
-        tooltip: 'scan',
-        child: CircleAvatar(child: Icon(Icons.send), backgroundColor: Colors
-            .transparent, foregroundColor: Colors.white, ),
+        onPressed: () {},
+        tooltip: 'Send',
+        child: CircleAvatar(
+          child: Icon(Icons.send),
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.white,
+        ),
       ),
     );
   }
