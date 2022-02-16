@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:csv/csv.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blue_elves/flutter_blue_elves.dart';
+import 'package:path_provider/path_provider.dart';
 import 'device_control.dart';
 import 'dart:io';
 
@@ -38,13 +40,13 @@ class _MyAppState extends State<MyApp> {
 
   List<DataRow> _rowList = [];
   static var itemIndex = 0;
-  List<List<String>> data = [];
+  List<List<String>> _data = [];
   void _addRow(String product, int quantity, int id) {
     // Built in Flutter Method.
     
     setState(() {
       //data for csv
-      data.add([product, quantity.toString(), id.toString()]);
+      _data.add([product, quantity.toString(), id.toString()]);
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below.
       _rowList.add(DataRow(cells: <DataCell>[
@@ -54,6 +56,7 @@ class _MyAppState extends State<MyApp> {
           onPressed: () {
             setState(() {
               _rowList.removeAt(id);
+              _data.removeAt(id);
               print(id);
               id = id - 1;
             });
@@ -263,22 +266,21 @@ class _MyAppState extends State<MyApp> {
           );
         });
   }
-}
-
-generateCsv() async {
-  String csvData = ListToCsvConverter().convert(data);
-  final String directory = (await getApplicationSupportDirectory()).path;
-  final path = "$directory/csv-${DateTime.now()}.csv";
-  print(path);
-  final File file = File(path);
-  await file.writeAsString(csvData);
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (_) {
-        return LoadCsvDataScreen(path: path);
-      },
-    ),
-  );
+  generateCsv() async {
+    String csvData = ListToCsvConverter().convert(_data);
+    final String directory = (await getApplicationSupportDirectory()).path;
+    final path = "$directory/csv-${DateTime.now()}.csv";
+    print(path);
+    final File file = File(path);
+    await file.writeAsString(csvData);
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (_) {
+    //       return LoadCsvDataScreen(path: path);
+    //     },
+    //   ),
+    // );
+  }
 }
 
 class _ConnectedItem {

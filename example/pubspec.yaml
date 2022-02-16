@@ -11,6 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  csv: ^5.0.1
+  path_provider: ^2.0.9
+  file_picker: ^4.4.0
+
 
   flutter_blue_elves: ^0.1.8
     # When depending on this package from a real application you should use:
