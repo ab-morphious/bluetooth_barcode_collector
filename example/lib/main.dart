@@ -196,7 +196,7 @@ class _MyAppState extends State<MyApp> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.blue,
-        onPressed: () {},
+        onPressed: () {generateCsv();},
         tooltip: 'Send',
         label: Text('Upload'),
         icon: Icon(Icons.cloud_upload),
@@ -268,7 +268,7 @@ class _MyAppState extends State<MyApp> {
   }
   generateCsv() async {
     String csvData = ListToCsvConverter().convert(_data);
-    final String directory = (await getApplicationSupportDirectory()).path;
+    final String directory = (await getApplicationDocumentsDirectory()).toString();
     final path = "$directory/csv-${DateTime.now()}.csv";
     print(path);
     final File file = File(path);
