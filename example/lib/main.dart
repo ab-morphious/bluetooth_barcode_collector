@@ -38,9 +38,13 @@ class _MyAppState extends State<MyApp> {
 
   List<DataRow> _rowList = [];
   static var itemIndex = 0;
+  List<List<String>> data = [];
   void _addRow(String product, int quantity, int id) {
     // Built in Flutter Method.
+    
     setState(() {
+      //data for csv
+      data.add([product, quantity.toString(), id.toString()]);
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below.
       _rowList.add(DataRow(cells: <DataCell>[
@@ -259,6 +263,22 @@ class _MyAppState extends State<MyApp> {
           );
         });
   }
+}
+
+generateCsv() async {
+  String csvData = ListToCsvConverter().convert(data);
+  final String directory = (await getApplicationSupportDirectory()).path;
+  final path = "$directory/csv-${DateTime.now()}.csv";
+  print(path);
+  final File file = File(path);
+  await file.writeAsString(csvData);
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return LoadCsvDataScreen(path: path);
+      },
+    ),
+  );
 }
 
 class _ConnectedItem {
