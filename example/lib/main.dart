@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
           children: [
             TextField(
               decoration: InputDecoration(
-                  hintText: "Tap here to focus",
+                  hintText: "Tap here",
                   filled: true,
                   fillColor: Colors.indigo.shade50,
                   border: OutlineInputBorder(
@@ -83,8 +83,9 @@ class _MyAppState extends State<MyApp> {
                     borderSide: BorderSide.none,
                   )),
               onChanged: (val) {
-                setState(() {
-                  this._scannedItem = val;
+                Future.delayed(const Duration(milliseconds: 2000), () {
+                  // Here you can write your code
+                  _displayTextInputDialog(context);
                 });
               },
             ),
@@ -208,6 +209,23 @@ class _MyAppState extends State<MyApp> {
       }
       ;
     });
+  }
+
+  Future<void> _displayTextInputDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('TextField in Dialog'),
+            content: TextField(
+              onChanged: (value) {
+
+              },
+              decoration: InputDecoration(hintText: "Text Field in Dialog"),
+            ),
+
+          );
+        });
   }
 }
 
