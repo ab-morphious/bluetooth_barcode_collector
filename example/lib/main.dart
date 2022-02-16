@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
             setState(() {
               _rowList.removeAt(id);
               print(id);
-              id = id-1;
+              id = id - 1;
             });
           },
           icon: Icon(
@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: Platform.isAndroid ? 100 : null,
+        toolbarHeight: 100,
         backgroundColor: Colors.indigo.shade700,
         centerTitle: false,
         title: Column(
@@ -77,7 +77,7 @@ class _MyAppState extends State<MyApp> {
               decoration: InputDecoration(
                   hintText: "Tap here to focus",
                   filled: true,
-                  fillColor: Colors.indigo.shade300,
+                  fillColor: Colors.indigo.shade50,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
@@ -93,43 +93,93 @@ class _MyAppState extends State<MyApp> {
       ),
       body: Column(
         children: [
-          MaterialButton(
-            onPressed: () {
-              setState(() {
-                _addRow(this._scannedItem, 1, itemIndex);
-                itemIndex = _rowList.length;
-              });
-            },
-            child: Text("Submit".toUpperCase()),
+          Container(
+            padding: EdgeInsets.all(5.0),
+            color: Colors.indigo.shade500,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                FlatButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      _clearScanData();
+                    });
+                  },
+                  icon: Icon(
+                    Icons.cleaning_services_rounded,
+                    color: Colors.white,
+                  ),
+                  label: Text(
+                    "Clear".toUpperCase(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                FlatButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      _undoScanning();
+                    });
+                  },
+                  icon: Icon(
+                    Icons.undo,
+                    color: Colors.white,
+                  ),
+                  label: Text(
+                    "Undo".toUpperCase(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                FlatButton.icon(
+                  color: Colors.green,
+                  onPressed: () {
+                    setState(() {
+                      _addRow(this._scannedItem, 1, itemIndex);
+                      itemIndex = _rowList.length;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.send,
+                    color: Colors.white,
+                  ),
+                  label: Text(
+                    "Submit".toUpperCase(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
           ),
           SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: DataTable(
-                  columnSpacing: MediaQuery.of(context).size.width * 0.2,
-                  columns: [
-                    DataColumn(
-                      label: Text(
-                        "Product",
-                        style: (TextStyle(
-                            fontSize: 15.0, fontWeight: FontWeight.bold)),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: DataTable(
+                    columnSpacing: MediaQuery.of(context).size.width * 0.2,
+                    columns: [
+                      DataColumn(
+                        label: Text(
+                          "Product",
+                          style: (TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold)),
+                        ),
                       ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        "Quantity",
-                        style: (TextStyle(
-                            fontSize: 15.0, fontWeight: FontWeight.bold)),
+                      DataColumn(
+                        label: Text(
+                          "Quantity",
+                          style: (TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold)),
+                        ),
                       ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        "Action",
-                        style: (TextStyle(
-                            fontSize: 15.0, fontWeight: FontWeight.bold)),
-                      ),
-                    )
-                  ],
-                  rows: _rowList)),
+                      DataColumn(
+                        label: Text(
+                          "Action",
+                          style: (TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold)),
+                        ),
+                      )
+                    ],
+                    rows: _rowList),
+              )),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -143,6 +193,21 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  void _clearScanData() {
+    setState(() {
+      _rowList.clear();
+    });
+  }
+
+  void _undoScanning() {
+    setState(() {
+      if (_rowList.length != 0) {
+        _rowList.removeLast();
+      }
+      ;
+    });
   }
 }
 
