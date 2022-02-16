@@ -30,6 +30,7 @@ class _MyAppState extends State<MyApp> {
   List<_ScannedData> _scanData = [];
   String _scannedItem = "";
   int _quantity = -1;
+  bool quantityInputShown = false;
   @override
   void initState() {
     super.initState();
@@ -83,11 +84,15 @@ class _MyAppState extends State<MyApp> {
                     borderSide: BorderSide.none,
                   )),
               onChanged: (val) {
-
-                Future.delayed(const Duration(milliseconds: 2000), () {
-                  // Here you can write your code
-                  _displayTextInputDialog(context);
+                setState(() {
+                  _scannedItem = val;
                 });
+                if(quantityInputShown==false) {
+                  Future.delayed(const Duration(milliseconds: 2000), () {
+                    // Here you can write your code
+                    _displayTextInputDialog(context);
+                  });
+                }
               },
             ),
           ],
@@ -97,7 +102,7 @@ class _MyAppState extends State<MyApp> {
         children: [
           Container(
             padding: EdgeInsets.all(5.0),
-            color: Colors.blueGrey,
+            color: Colors.indigo.shade900,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -134,8 +139,7 @@ class _MyAppState extends State<MyApp> {
                 FlatButton.icon(
                   onPressed: () {
                     setState(() {
-                      _addRow(this._scannedItem, 1, itemIndex);
-                      itemIndex = _rowList.length;
+                     _displayTextInputDialog(context);
                     });
                   },
                   icon: Icon(
@@ -184,7 +188,7 @@ class _MyAppState extends State<MyApp> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.blue,
         onPressed: () {},
         tooltip: 'Send',
         label: Text('Upload'),
@@ -209,6 +213,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _displayTextInputDialog(BuildContext context) async {
+    setState(() {
+      quantityInputShown = true;
+    });
     return showDialog(
         context: context,
         builder: (context) {
@@ -218,18 +225,26 @@ class _MyAppState extends State<MyApp> {
               FlatButton(
                   child: Text('CANCEL'),
                   onPressed: () {
+                    setState(() {
+                      quantityInputShown = true;
+                    });
                     Navigator.of(context).pop();
                   }),
               FlatButton.icon(
                   label: Text('DONE', style: TextStyle(color: Colors.white),),
                   color: Colors.indigo,
                   onPressed: () {
-
+                    _addRow(this._scannedItem, 1, itemIndex);
+                    itemIndex = _rowList.length;
+                    setState(() {
+                      quantityInputShown = false;
+                    });
+                    Navigator.of(context).pop();
                   }, icon: Icon(Icons.done, color: Colors.white,),)
             ],
             content: TextField(
               onChanged: (value) {
-
+                  this._quantity = int.parse(value);
               },
               decoration: InputDecoration(hintText: "Enter quantity here"),
             ),
