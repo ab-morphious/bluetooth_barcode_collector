@@ -6,6 +6,7 @@ import 'package:get/route_manager.dart';
 
 import '../api/api_service.dart';
 import '../model/response_model.dart';
+import 'login.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -67,7 +68,7 @@ class _SignUpState extends State<SignUp> {
                           'Welcome to Barcode Data Collector',
                           style: TextStyle(
                             fontSize: 28,
-                            color: Colors.white,
+                            color: Colors.white.withOpacity(0.8),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -209,13 +210,21 @@ class _SignUpState extends State<SignUp> {
                               )),
                             ),
                           ),
+
                           Padding(
                             padding: EdgeInsets.only(top: 10, bottom: 40),
                             child: InkWell(
                               onTap: () {
-                                // Get.to(SignIn(),
-                                //     transition: Transition.noTransition);
+                                Get.to(SignIn(),
+                                    transition: Transition.noTransition);
                               },
+                              child: Text(
+                                'Already have an account? Login',
+                                style: TextStyle(
+                                    fontFamily: 'AlegreyaSans',
+                                    fontSize: 16,
+                                    color: Colors.white70),
+                              ),
                             ),
                           ),
                         ],

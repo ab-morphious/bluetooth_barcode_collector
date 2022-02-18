@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blue_elves/flutter_blue_elves.dart';
 import 'package:flutter_blue_elves_example/pages/sign_up.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:path_provider/path_provider.dart';
 import 'pages/device_control.dart';
 import 'dart:io';
@@ -14,7 +15,7 @@ void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   //runApp(const MaterialApp(home: MyApp()));
-  runApp(MaterialApp(home: SignUp()));
+  runApp(GetMaterialApp(home: SignUp()));
 }
 
 class MyApp extends StatefulWidget {
