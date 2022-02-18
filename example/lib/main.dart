@@ -19,6 +19,7 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   //runApp(const MaterialApp(home: MyApp()));
   bool isFirstTime = true;
+  //MissingPluginException
   await GetStorage.init();
   var getXStorage = Utility.getGetXStorage();
 
