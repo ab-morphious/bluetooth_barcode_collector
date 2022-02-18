@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blue_elves/flutter_blue_elves.dart';
+import 'package:flutter_blue_elves_example/pages/sign_up.dart';
 import 'package:path_provider/path_provider.dart';
 import 'pages/device_control.dart';
 import 'dart:io';
@@ -12,7 +13,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  runApp(const MaterialApp(home: MyApp()));
+  //runApp(const MaterialApp(home: MyApp()));
+  runApp(MaterialApp(home: SignUp()));
 }
 
 class MyApp extends StatefulWidget {

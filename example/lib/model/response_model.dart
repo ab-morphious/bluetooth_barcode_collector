@@ -28,7 +28,7 @@ class SignUpRequestModel {
 
 class SignUpResponseModel {
   var otp;
-  String error;
+  String? error;
   SignUpResponseModel({this.otp, this.error});
 
   factory SignUpResponseModel.fromJson(Map<String, dynamic> json) {

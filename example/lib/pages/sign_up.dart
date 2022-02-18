@@ -1,9 +1,11 @@
-
-
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/route_manager.dart';
+
+import '../api/api_service.dart';
+import '../model/response_model.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -11,12 +13,19 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  SignUpRequestModel signUpRequestModel;
+  late SignUpRequestModel signUpRequestModel;
   @override
   void initState() {
     // TODO: implement initState
-    signUpRequestModel = SignUpRequestModel();
+    signUpRequestModel = SignUpRequestModel(
+        email: '',
+        password: '',
+        firstname: '',
+        password_confirmation: '',
+        lastname: '');
     super.initState();
+
+    FlutterNativeSplash.remove();
   }
 
   @override
@@ -25,6 +34,7 @@ class _SignUpState extends State<SignUp> {
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Color(0xFF1A4DAD),
         body: DelayedDisplay(
           delay: Duration(milliseconds: 1000),
           child: Padding(
@@ -37,91 +47,143 @@ class _SignUpState extends State<SignUp> {
                   Column(
                     children: [
                       Align(
-                        child: InkWell(
-                            onTap: () {
-                              Get.back();
-                            },
-                            child: Image.asset(
-                              'assets/images/back_icon.png',
-                              width: width * 0.1,
-                            )),
-                        alignment: Alignment.topLeft,
+                        child: Container(),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 60,
                       ),
                       Center(
                         child: Text(
                           'Hello there!',
-                          style: TextStyle(fontSize: 34),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          'Welcome to Arabic',
-                          style: TextStyle(
-                            fontSize: 34,
-                          ),
+                          style: TextStyle(fontSize: 34, color: Colors.white),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      Text(
-                        'Learn Arabic in a simple way',
-                        style: TextStyle(
-                            fontFamily: 'AlegreyaSans',
-                            fontSize: 14,
-                            color: grey),
+                      Center(
+                        child: Text(
+                          'Welcome to Barcode Data Collector',
+                          style: TextStyle(
+                            fontSize: 28,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                     ],
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 90),
-                    child: DelayedDisplay(
-                      delay: Duration(milliseconds: 1600),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Email',
-                            style: TextStyle(
-                                fontFamily: 'AlegreyaSans', fontSize: 14),
-                          ),
-                          SizedBox(
-                            height: height * 0.01,
-                          ),
-                          Container(
-                            height: height * 0.09,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(22),
-                                border: Border.all(
-                                  color: grey,
-                                )),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 20, right: 15),
-                                  child: Image.asset(
-                                      'assets/images/email_icon.png'),
+                  Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 90),
+                        child: DelayedDisplay(
+                          delay: Duration(milliseconds: 1600),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Email',
+                                style: TextStyle(
+                                    fontFamily: 'AlegreyaSans',
+                                    fontSize: 14,
+                                    color: Colors.white),
+                              ),
+                              SizedBox(
+                                height: height * 0.01,
+                              ),
+                              Container(
+                                height: height * 0.09,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(22),
+                                    border: Border.all(
+                                      color: Colors.grey.shade200,
+                                    )),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 20, right: 15),
+                                        child: Icon(
+                                          Icons.email,
+                                          color: Colors.white54,
+                                        )),
+                                    Expanded(
+                                      child: TextField(
+                                        onChanged: (value) {
+                                          signUpRequestModel.email = value;
+                                        },
+                                        decoration: InputDecoration(
+                                            hintText: 'Email',
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey.shade200),
+                                            border: InputBorder.none),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Expanded(
-                                  child: TextField(
-                                    onChanged: (value) {
-                                      signUpRequestModel.email = value;
-                                    },
-                                    decoration: InputDecoration(
-                                        hintText: 'Email',
-                                        hintStyle: TextStyle(color: grey),
-                                        border: InputBorder.none),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Container(
+                        child: DelayedDisplay(
+                          delay: Duration(milliseconds: 1600),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Password',
+                                style: TextStyle(
+                                    fontFamily: 'AlegreyaSans',
+                                    fontSize: 14,
+                                    color: Colors.white),
+                              ),
+                              SizedBox(
+                                height: height * 0.01,
+                              ),
+                              Container(
+                                height: height * 0.09,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(22),
+                                    border: Border.all(
+                                      color: Colors.grey.shade200,
+                                    )),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 20, right: 15),
+                                        child: Icon(Icons.password_outlined,
+                                            color: Colors.white54)),
+                                    Expanded(
+                                      child: TextField(
+                                        onChanged: (value) {
+                                          signUpRequestModel.email = value;
+                                        },
+                                        decoration: InputDecoration(
+                                            hintText: 'Password',
+                                            hintStyle:
+                                                TextStyle(color: Colors.white),
+                                            border: InputBorder.none),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   DelayedDisplay(
                     delay: Duration(milliseconds: 1800),
@@ -129,54 +191,31 @@ class _SignUpState extends State<SignUp> {
                       child: Column(
                         children: [
                           InkWell(
-                            onTap: () {
-                              APIService apiService = APIService();
-                              if (!signUpRequestModel.email.isBlank &&
-                                  signUpRequestModel.email != null) {
-                                apiService
-                                    .isEmailAvailable(signUpRequestModel.email)
-                                    .then((value) {
-                                  if (value != "error") {
-                                    Get.to(SignUpForm2(signUpRequestModel),
-                                        transition: Transition.noTransition);
-                                  }else{
-                                    showSnackBar("Email is already in use.", context, Colors.red);
-                                  }
-                                });
-                              } else {
-                                showSnackBar("Email can not be empty!", context,
-                                    Colors.red);
-                              }
-                            },
+                            onTap: () {},
                             child: Container(
                               margin: EdgeInsets.only(bottom: 35, top: 60),
                               width: width,
                               height: height * 0.09,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(22),
-                                  color: Colors.black),
+                                  color: Colors.white),
                               child: Center(
                                   child: Text(
-                                    'Next',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 17),
-                                  )),
+                                'Sign up',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w400),
+                              )),
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 10, bottom: 40),
                             child: InkWell(
                               onTap: () {
-                                Get.to(SignIn(),
-                                    transition: Transition.noTransition);
+                                // Get.to(SignIn(),
+                                //     transition: Transition.noTransition);
                               },
-                              child: Text(
-                                'Already have an account? Login',
-                                style: TextStyle(
-                                    fontFamily: 'AlegreyaSans',
-                                    fontSize: 16,
-                                    color: green),
-                              ),
                             ),
                           ),
                         ],
