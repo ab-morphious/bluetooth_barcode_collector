@@ -4,18 +4,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_blue_elves/flutter_blue_elves.dart';
+import 'package:flutter_blue_elves_example/pages/login.dart';
 import 'package:flutter_blue_elves_example/pages/sign_up.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:flutter_blue_elves_example/utility/utility.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'pages/device_control.dart';
 import 'dart:io';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
-void main() {
+void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   //runApp(const MaterialApp(home: MyApp()));
-  runApp(GetMaterialApp(home: SignUp()));
+  bool isFirstTime = true;
+  await GetStorage.init();
+  var getXStorage = Utility.getGetXStorage();
+
+  Utility.isFirstTime().then((value) {
+    print(value.toString() + " fisrt time");
+    isFirstTime = value;
+  });
+  runApp(GetMaterialApp(home: isFirstTime ? SignUp() : SignIn()));
 }
 
 class MyApp extends StatefulWidget {
@@ -50,7 +61,7 @@ class _MyAppState extends State<MyApp> {
   List<List<String>> _data = [];
   void _addRow(String product, int quantity, int id) {
     // Built in Flutter Method.
-    
+
     setState(() {
       //data for csv
       _data.add([product, quantity.toString(), id.toString()]);
@@ -203,7 +214,9 @@ class _MyAppState extends State<MyApp> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.blue,
-        onPressed: () {generateCsv();},
+        onPressed: () {
+          generateCsv();
+        },
         tooltip: 'Send',
         label: Text('Upload'),
         icon: Icon(Icons.cloud_upload),
@@ -232,6 +245,7 @@ class _MyAppState extends State<MyApp> {
     });
     return showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
             title: Text('Enter quantity'),
@@ -266,16 +280,20 @@ class _MyAppState extends State<MyApp> {
             ],
             content: TextField(
               onChanged: (value) {
-                this._quantity = int.parse(value);
+                setState(() {
+                  this._quantity = int.parse(value);
+                });
               },
               decoration: InputDecoration(hintText: "Enter quantity here"),
             ),
           );
         });
   }
+
   generateCsv() async {
     String csvData = ListToCsvConverter().convert(_data);
-    final String directory = (await getApplicationSupportDirectory()).toString();
+    final String directory =
+        (await getApplicationSupportDirectory()).toString();
     final path = "$directory/csv-${DateTime.now()}.csv";
     print(path);
     final File file = File(path);

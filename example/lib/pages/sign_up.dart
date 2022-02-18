@@ -1,10 +1,12 @@
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_blue_elves_example/utility/utility.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/route_manager.dart';
 
 import '../api/api_service.dart';
+import '../main.dart';
 import '../model/response_model.dart';
 import 'login.dart';
 
@@ -18,12 +20,7 @@ class _SignUpState extends State<SignUp> {
   @override
   void initState() {
     // TODO: implement initState
-    signUpRequestModel = SignUpRequestModel(
-        email: '',
-        password: '',
-        firstname: '',
-        password_confirmation: '',
-        lastname: '');
+    signUpRequestModel = SignUpRequestModel(email: '', password: '');
     super.initState();
 
     FlutterNativeSplash.remove();
@@ -115,6 +112,7 @@ class _SignUpState extends State<SignUp> {
                                         )),
                                     Expanded(
                                       child: TextField(
+                                        style: TextStyle(color: Colors.white),
                                         onChanged: (value) {
                                           signUpRequestModel.email = value;
                                         },
@@ -167,6 +165,8 @@ class _SignUpState extends State<SignUp> {
                                             color: Colors.white54)),
                                     Expanded(
                                       child: TextField(
+                                        obscureText: true,
+                                        style: TextStyle(color: Colors.white),
                                         onChanged: (value) {
                                           signUpRequestModel.email = value;
                                         },
@@ -192,7 +192,24 @@ class _SignUpState extends State<SignUp> {
                       child: Column(
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () async {
+                              APIService apiService = APIService();
+                              await apiService
+                                  .signUp(signUpRequestModel)
+                                  .then((value) {
+                                if (value is SignUpResponseModel) {
+                                  print(value);
+                                  Utility.setNotNewUserAnymore();
+                                  Get.to(SignIn(),
+                                      transition: Transition.noTransition);
+                                } else {
+                                  Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: Text("Registration failed"),
+                                    backgroundColor: Colors.red,
+                                  ));
+                                }
+                              });
+                            },
                             child: Container(
                               margin: EdgeInsets.only(bottom: 35, top: 60),
                               width: width,
@@ -210,7 +227,6 @@ class _SignUpState extends State<SignUp> {
                               )),
                             ),
                           ),
-
                           Padding(
                             padding: EdgeInsets.only(top: 10, bottom: 40),
                             child: InkWell(

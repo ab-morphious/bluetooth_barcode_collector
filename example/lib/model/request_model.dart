@@ -14,10 +14,10 @@ class LoginRequestModel {
 }
 
 class LoginResponseModel {
-  final String token;
+  final String? token;
   //final int otp;
 
-  LoginResponseModel({required this.token});
+  LoginResponseModel({this.token});
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
     return LoginResponseModel(

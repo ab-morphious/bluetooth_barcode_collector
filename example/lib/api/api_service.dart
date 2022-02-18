@@ -1,15 +1,18 @@
 import 'dart:convert';
 
+import '../model/request_model.dart';
 import '../model/response_model.dart';
 import 'package:http/http.dart' as http;
 
 class APIService {
+  String BASE_URL = "https://kirchat.com/qr_scaner/";
   Future<dynamic> login(LoginRequestModel loginRequestModel) async {
-    String url = "https://arabiclanguageapp.co.uk/admin/api/login";
+    String url = "$BASE_URL"+ "auth/login";
     final response =
     await http.post(Uri.parse(url), body: loginRequestModel.toJson());
 
-    if (response.statusCode == 201 || response.statusCode == 400) {
+    if (response.statusCode == 201 || response.statusCode == 400 || response
+        .statusCode == 200) {
       print("res code" + response.statusCode.toString());
       return LoginResponseModel.fromJson(json.decode(response.body));
     } else {
@@ -18,11 +21,13 @@ class APIService {
   }
 
   Future<dynamic> signUp(SignUpRequestModel signUpRequestModel) async {
-    String url = "https://arabiclanguageapp.co.uk/admin/api/register";
+    String url = "$BASE_URL" + "auth/signup";
     final response =
     await http.post(Uri.parse(url), body: signUpRequestModel.toJson());
 
-    if (response.statusCode == 200) {
+    print(response.body);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
       print("Status code = " + response.statusCode.toString());
       print(response.body.toString());
       return SignUpResponseModel.fromJson(json.decode(response.body));
@@ -35,27 +40,4 @@ class APIService {
   }
 }
 
-class LoginRequestModel {
-  String email;
-  String password;
-  LoginRequestModel({required this.email, required this.password});
-
-  Map<String, dynamic> toJson() {
-    Map<String, dynamic> map = {"email": this.email, "password": this.password};
-    return map;
-  }
-}
-
-class LoginResponseModel {
-  final String token;
-  //final int otp;
-
-  LoginResponseModel({required this.token});
-
-  factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
-    return LoginResponseModel(
-        token: json["token"] != null ? json["token"] : "");
-    // otp: json["otp"] != null ? json["otp"] : "");
-  }
-}
 

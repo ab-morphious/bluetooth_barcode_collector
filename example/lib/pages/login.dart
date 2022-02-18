@@ -1,10 +1,12 @@
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_blue_elves_example/main.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/route_manager.dart';
 
 import '../api/api_service.dart';
+import '../model/request_model.dart';
 import '../model/response_model.dart';
 
 class SignIn extends StatefulWidget {
@@ -115,11 +117,13 @@ class _SignInState extends State<SignIn> {
                                         onChanged: (value) {
                                           logInRequestModel.email = value;
                                         },
+                                        style: TextStyle(color: Colors.white),
                                         decoration: InputDecoration(
                                             hintText: 'Email',
                                             hintStyle: TextStyle(
                                                 color: Colors.grey.shade200),
-                                            border: InputBorder.none),
+                                            border: InputBorder.none,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -164,9 +168,11 @@ class _SignInState extends State<SignIn> {
                                             color: Colors.white54)),
                                     Expanded(
                                       child: TextField(
+                                        obscureText: true,
                                         onChanged: (value) {
-                                          logInRequestModel.email = value;
+                                          logInRequestModel.password = value;
                                         },
+                                        style: TextStyle(color: Colors.white),
                                         decoration: InputDecoration(
                                             hintText: 'Password',
                                             hintStyle:
@@ -189,7 +195,11 @@ class _SignInState extends State<SignIn> {
                       child: Column(
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () async {
+                              APIService apiService = new APIService();
+                              await apiService.login(logInRequestModel).then(
+                                      (value) => Get.to(MyApp(), transition: Transition.rightToLeft));
+                            },
                             child: Container(
                               margin: EdgeInsets.only(bottom: 35, top: 60),
                               width: width,
@@ -215,7 +225,7 @@ class _SignInState extends State<SignIn> {
                                     transition: Transition.noTransition);
                               },
                               child: Text(
-                                'Forgot password',
+                                'Forgot password ? ',
                                 style: TextStyle(
                                     fontFamily: 'AlegreyaSans',
                                     fontSize: 16,
