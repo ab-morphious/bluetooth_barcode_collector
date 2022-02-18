@@ -278,7 +278,7 @@ class _MyAppState extends State<MyApp> {
     final File file = File(path);
     await file.writeAsString(csvData);
 
-    await file.readAsBytes();
+    //read ezihu lay and see if it can be uploaded
 
     // Navigator.of(context).push(
     //   MaterialPageRoute(
