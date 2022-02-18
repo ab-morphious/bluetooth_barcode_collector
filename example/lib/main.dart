@@ -272,11 +272,14 @@ class _MyAppState extends State<MyApp> {
   }
   generateCsv() async {
     String csvData = ListToCsvConverter().convert(_data);
-    final String directory = (await getApplicationDocumentsDirectory()).toString();
+    final String directory = (await getApplicationSupportDirectory()).toString();
     final path = "$directory/csv-${DateTime.now()}.csv";
     print(path);
     final File file = File(path);
     await file.writeAsString(csvData);
+
+    await file.readAsBytes();
+
     // Navigator.of(context).push(
     //   MaterialPageRoute(
     //     builder: (_) {
