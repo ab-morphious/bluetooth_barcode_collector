@@ -1,24 +1,21 @@
-import 'package:get_storage/get_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
 
-class Utility{
-   static String token = "";
-   static final String FIRST_TIME = "first_time";
+class Utility {
+  static String token = "";
+  static final String FIRST_TIME = "first_time";
 
-   static dynamic getGetXStorage()
-   {
-      final getXStorage = GetStorage();
-      return getXStorage;
-   }
-   static Future<bool> isFirstTime() async
-   {
-      // Obtain shared preferences.
-      var isFirst = getGetXStorage().read(FIRST_TIME) ?? true;
-      return isFirst;
-   }
+  static dynamic getHive() async {
+    final hive = await Hive.openBox(FIRST_TIME);
+    return hive;
+  }
 
-   static void setNotNewUserAnymore() async
-   {
-     getGetXStorage().write(FIRST_TIME, false);
-   }
+  static Future<bool> isFirstTime() async {
+    // Obtain shared preferences.
+    var isFirst = getHive().get(FIRST_TIME) ?? true;
+    return isFirst;
+  }
+
+  static void setNotNewUserAnymore() async {
+    getHive().put(FIRST_TIME, false);
+  }
 }

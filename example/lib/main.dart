@@ -8,8 +8,8 @@ import 'package:flutter_blue_elves_example/pages/login.dart';
 import 'package:flutter_blue_elves_example/pages/sign_up.dart';
 import 'package:flutter_blue_elves_example/utility/utility.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'pages/device_control.dart';
 import 'dart:io';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -18,10 +18,10 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   //runApp(const MaterialApp(home: MyApp()));
+  await Hive.initFlutter();
   bool isFirstTime = true;
   //MissingPluginException
-  await GetStorage.init();
-  var getXStorage = Utility.getGetXStorage();
+  var getHive = Utility.getHive();
 
   Utility.isFirstTime().then((value) {
     print(value.toString() + " fisrt time");
@@ -292,13 +292,17 @@ class _MyAppState extends State<MyApp> {
   }
 
   generateCsv() async {
-    String csvData = ListToCsvConverter().convert(_data);
+
+
+   /*
+   String csvData = ListToCsvConverter().convert(_data);
     final String directory =
         (await getApplicationSupportDirectory()).toString();
     final path = "$directory/csv-${DateTime.now()}.csv";
     print(path);
     final File file = File(path);
     await file.writeAsString(csvData);
+    */
 
     //read ezihu lay and see if it can be uploaded
 
